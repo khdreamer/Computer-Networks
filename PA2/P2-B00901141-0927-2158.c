@@ -61,16 +61,7 @@ int main(void)
 			while(1){
 
 				char bufferStr[80]={0};
-				/*
-				//clean up buffer
-				int i=0;
-				while(i<80){
-			
-						bufferStr[i]=0;
-						i++;	
 				
-				}
-*/
 				// read
 				if(read(new_fd, bufferStr, 79)<0) perror("read");
 			
