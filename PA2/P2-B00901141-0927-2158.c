@@ -51,38 +51,39 @@ int main(void)
 
     while(1) {  // main accept() loop
 
-	char bufferStr[80];
-        sin_size = sizeof(struct sockaddr_in);
-        if ((new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size)) == -1) {
-            perror("accept");
-            continue;
-        }
-        printf("server: got connection from %s\n",inet_ntoa(their_addr.sin_addr));
-
-	//read
-	if(read(new_fd, bufferStr, 79)<0)
-	  perror("read");
-
-	//calculate correct length
-	int length=0;
-	while(bufferStr[length]!='\r'){
-
-	  length++;
-
-	}
-
-	//get (prettier) result
-	char resultStr[length+1];
-	strncpy(resultStr, bufferStr, length);
-	strcat(resultStr,"\n");	
-
-	int sendResult=send(new_fd, resultStr, length+1, 0);
+      sin_size = sizeof(struct sockaddr_in);
+      if ((new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size)) == -1) {
+          perror("accept");
+          continue;
+      }
+      printf("server: got connection from %s\n",inet_ntoa(their_addr.sin_addr));
 	
-	if (sendResult == -1)
-	  perror("send");
+			while(1){
 
-	close(new_fd);
-    }
+				char bufferStr[80]={0};
+				/*
+				//clean up buffer
+				int i=0;
+				while(i<80){
+			
+						bufferStr[i]=0;
+						i++;	
+				
+				}
+*/
+				// read
+				if(read(new_fd, bufferStr, 79)<0) perror("read");
+			
+				//send
+				int sendResult=send(new_fd, bufferStr, strlen(bufferStr), 0);
+				if (sendResult == -1)
+					  perror("send");
+			
+			}
+
+			close(new_fd);
+		}
+
 
     return 0;
 }
